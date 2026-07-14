@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-display: "Space Grotesk", sans-serif;
+}
+
+/* Base resets & theme styles */
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom styles for glowing backgrounds and bento items */
+.bento-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.5rem; /* 24px capsular radius */
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background-color: #ffffff;
+  box-shadow: 0 4px 25px -5px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.dark .bento-card {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background-color: #161616;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+.bento-card-interactive {
+  cursor: pointer;
+}
+
+.bento-card-interactive:hover {
+  background-color: #ffffff;
+  border-color: rgba(249, 115, 22, 0.4);
+  box-shadow: 0 14px 35px -10px rgba(249, 115, 22, 0.12), 0 6px 20px -3px rgba(0, 0, 0, 0.06);
+}
+
+.dark .bento-card-interactive:hover {
+  background-color: #1a1a1a;
+  border-color: rgba(249, 115, 22, 0.25);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 25px -10px rgba(249, 115, 22, 0.15);
+}
+
+/* Mouse gradient interactive background */
+.hover-glow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle 120px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(249, 115, 22, 0.08) 0%, transparent 80%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hover-glow:hover::before {
+  opacity: 1;
+}
+
+/* Custom print media styles for Resume */
+@media print {
+  body {
+    background-color: white !important;
+    color: black !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-full-width {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(150, 150, 150, 0.3);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(150, 150, 150, 0.5);
+}
