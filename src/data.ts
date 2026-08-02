@@ -30,46 +30,19 @@ export const valueProps = [
 
 export const projectsData: Project[] = [
   {
-    id: 'ims-proc',
-    title: 'IMS.proc',
-    description: 'High-Performance Inventory Management System with real-time data handling.',
-    longDescription: 'Architected a robust, lightning-fast inventory management system to handle rapid data flows with end-to-end type safety, high concurrency handling, and custom schema architecture.',
-    tech: ['Next.js 15', 'Fastify', 'PostgreSQL', 'Drizzle ORM', 'TypeScript', 'Tailwind CSS'],
-    category: 'fullstack',
-    githubUrl: 'https://github.com/sam28u/ims-proc',
-    highlights: [
-      'Type-safe query building and transactions using Drizzle ORM',
-      'Fastify-powered ultra-fast REST APIs optimizing throughput',
-      'Scalable relational database structure optimized with custom indexing'
-    ]
-  },
-  {
-    id: 'seismic-io',
-    title: 'SEISMIC.IO',
-    description: 'Advanced Tectonic Surveillance & real-time seismic visualization system.',
-    longDescription: 'Built a specialized TypeScript-based web application focused on processing, streaming, and visualizing real-time advanced tectonic surveillance data with map-based interfaces and reactive charts.',
-    tech: ['TypeScript', 'React', 'Vite', 'Tailwind CSS', 'D3.js', 'Leaflet', 'Express'],
-    category: 'frontend',
-    githubUrl: 'https://github.com/sam28u/seismic-io',
-    highlights: [
-      'Real-time streaming telemetry processed client-side with minimal latency',
-      'Interactive 3D/2D geographical map widgets showing seismic coordinates',
-      'Rich animated charts displaying signal wavelengths using high-performance canvas layers'
-    ]
-  },
-  {
-    id: 'ai-job-tracking',
-    title: 'AI-Job-Tracking',
-    description: 'AI-Powered Career Management Platform and workflow automation.',
-    longDescription: 'Developed an AI-driven career and job search tracking dashboard integrating large language models to automate resume tailoring, application tracking, interview prepping, and actionable workflow pipelines.',
-    tech: ['React', 'TypeScript', 'Node.js', 'LangChain', 'Google Gemini API', 'PostgreSQL', 'Clerk'],
+    id: 'ai-resume-builder',
+    title: 'AI Resume Builder',
+    description: 'Intelligent Resume Generation Platform with real-time optimization.',
+    longDescription: 'Created a next-generation resume authoring platform featuring generative text enhancement, keyword density score checking, and PDF compilation for perfect applicant tracking system (ATS) compatibility.',
+    tech: ['React', 'TypeScript', 'Tailwind CSS', 'Google Gemini API', 'LangGraph', 'PDFKit'],
     category: 'ai',
-    githubUrl: 'https://github.com/sam28u/ai-job-tracking',
+    githubUrl: 'https://github.com/sam28u/ai-resume-builder',
     highlights: [
-      'AI assistant that scores resume matching scores for job descriptions',
-      'Automated custom cover letter and follow-up email drafts',
-      'Dynamic workflow drag-and-drop board for job applications'
-    ]
+      'Dynamic multi-step builder with real-time score assessment of ATS rules',
+      'Generative rewriting utilizing stateful agents to structure profile statements',
+      'Client-side print rendering optimized for instant high-quality single-page resumes'
+    ],
+    demoUrl: "https://www.google.com",
   },
   {
     id: 'costly',
@@ -83,21 +56,53 @@ export const projectsData: Project[] = [
       'Visual mathematical modeling of routine habits as monetary and hourly expenses',
       'Dynamic interactive dashboard with charts showing habits streak retention and progress analytics',
       'Personal target goals engine with interactive alerts and recommendations'
-    ]
+    ],
+    demoUrl: "google.com",
   },
   {
-    id: 'ai-resume-builder',
-    title: 'AI Resume Builder',
-    description: 'Intelligent Resume Generation Platform with real-time optimization.',
-    longDescription: 'Created a next-generation resume authoring platform featuring generative text enhancement, keyword density score checking, and PDF compilation for perfect applicant tracking system (ATS) compatibility.',
-    tech: ['React', 'TypeScript', 'Tailwind CSS', 'Google Gemini API', 'LangGraph', 'PDFKit'],
+    id: 'ai-job-tracking',
+    title: 'AI-Job-Tracking',
+    description: 'AI-Powered Career Management Platform and workflow automation.',
+    longDescription: 'Developed an AI-driven career and job search tracking dashboard integrating large language models to automate resume tailoring, application tracking, interview prepping, and actionable workflow pipelines.',
+    tech: ['React', 'TypeScript', 'Node.js', 'LangChain', 'Google Gemini API', 'PostgreSQL', 'Clerk'],
     category: 'ai',
-    githubUrl: 'https://github.com/sam28u/ai-resume-builder',
+    githubUrl: 'https://github.com/sam28u/ai-job-tracking',
     highlights: [
-      'Dynamic multi-step builder with real-time score assessment of ATS rules',
-      'Generative rewriting utilizing stateful agents to structure profile statements',
-      'Client-side print rendering optimized for instant high-quality single-page resumes'
-    ]
+      'AI assistant that scores resume matching scores for job descriptions',
+      'Automated custom cover letter and follow-up email drafts',
+      'Dynamic workflow drag-and-drop board for job applications'
+    ],
+    demoUrl: "google.com",
+  },
+  {
+    id: 'ims-proc',
+    title: 'IMS.proc',
+    description: 'High-Performance Inventory Management System with real-time data handling.',
+    longDescription: 'Architected a robust, lightning-fast inventory management system to handle rapid data flows with end-to-end type safety, high concurrency handling, and custom schema architecture.',
+    tech: ['Next.js 15', 'Fastify', 'PostgreSQL', 'Drizzle ORM', 'TypeScript', 'Tailwind CSS'],
+    category: 'fullstack',
+    githubUrl: 'https://github.com/sam28u/ims-proc',
+    highlights: [
+      'Type-safe query building and transactions using Drizzle ORM',
+      'Fastify-powered ultra-fast REST APIs optimizing throughput',
+      'Scalable relational database structure optimized with custom indexing'
+    ],
+    demoUrl: "google.com",
+  },
+  {
+    id: 'seismic-io',
+    title: 'SEISMIC.IO',
+    description: 'Advanced Tectonic Surveillance & real-time seismic visualization system.',
+    longDescription: 'Built a specialized TypeScript-based web application focused on processing, streaming, and visualizing real-time advanced tectonic surveillance data with map-based interfaces and reactive charts.',
+    tech: ['TypeScript', 'React', 'Vite', 'Tailwind CSS', 'D3.js', 'Leaflet', 'Express'],
+    category: 'frontend',
+    githubUrl: 'https://github.com/sam28u/seismic-io',
+    highlights: [
+      'Real-time streaming telemetry processed client-side with minimal latency',
+      'Interactive 3D/2D geographical map widgets showing seismic coordinates',
+      'Rich animated charts displaying signal wavelengths using high-performance canvas layers'
+    ],
+    demoUrl: "google.com",
   }
 ];
 
@@ -155,18 +160,18 @@ export const skillsData: Skill[] = [
 export const cpData: CompetitiveProgramming[] = [
   {
     platform: 'LeetCode',
-    solved: 500,
-    maxRating: 1567,
-    ratingText: 'Max Rating: 1567',
+    solved: 600,
+    maxRating: 1578,
+    ratingText: 'Max Rating: 1578',
     details: 'Consistently active in weekly contests and algorithmic challenges using C++, Java, and Python to craft optimized spatial-temporal complexity solutions.',
-    profileUrl: 'https://leetcode.com/sam28u' // Hypothetical, based on github username sam28u
+    profileUrl: 'https://leetcode.com/sam28u'
   },
   {
     platform: 'CodeForces',
-    solved: 200,
+    solved: 250,
     maxRating: 1200,
-    ratingText: 'Max Rating: 1200+ (Pupil/Specialist range)',
+    ratingText: 'Max Rating: 1250+ (Pupil/Specialist range)',
     details: 'Regular participant in Div-2/Div-3 standard rounds, focusing on rapid problem comprehension, algorithmic translation, speed, and logical precision under strict time constraint conditions.',
-    profileUrl: 'https://codeforces.com/profile/sam28u' // Hypothetical profile url
+    profileUrl: 'https://codeforces.com/profile/sam28u'
   }
 ];

@@ -8,11 +8,25 @@ export default function BentoProfile() {
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const card = e.currentTarget;
+    card.style.transition = 'none';
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     card.style.setProperty('--mouse-x', `${x}px`);
     card.style.setProperty('--mouse-y', `${y}px`);
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * -1.8;
+    const rotateY = ((x - centerX) / centerX) * 1.8;
+
+    card.style.transform = `perspective(1400px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-2px) scale(1.003)`;
+  };
+
+  const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget;
+    card.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease';
+    card.style.transform = 'perspective(1400px) rotateX(0deg) rotateY(0deg) translateY(0px) scale(1)';
   };
 
   return (
@@ -24,6 +38,7 @@ export default function BentoProfile() {
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
         onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
         className="bento-card bento-card-interactive hover-glow md:col-span-8 p-8 flex flex-col justify-between"
       >
         <div className="z-10">
@@ -90,65 +105,95 @@ export default function BentoProfile() {
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.1 }}
         onMouseMove={handleMouseMove}
-        className="bento-card bento-card-interactive hover-glow md:col-span-4 p-8 flex flex-col justify-between"
+        onMouseLeave={handleMouseLeave}
+        className="bento-card bento-card-interactive hover-glow md:col-span-4 flex flex-col justify-between overflow-hidden"
       >
-        <div className="z-10">
-          <div className="w-16 h-16 rounded-2xl bg-orange-500 flex items-center justify-center text-white font-mono text-2xl font-bold mb-6 shadow-lg shadow-orange-500/20">
-            SPV
-          </div>
+        {/* Full-width Passport / Portrait Photo Container */}
+        <div className="relative w-full h-72 sm:h-80 overflow-hidden bg-neutral-100 dark:bg-neutral-900 border-b border-neutral-200/50 dark:border-neutral-800/50 group/img z-10 flex-shrink-0">
+          {/* 
+            INSTRUCTION TO ADD YOUR MANUAL PHOTO:
+            Place your passport size / portrait image into the 'public' folder as 'profile.jpg'.
+            It will automatically load here full width! Until then, a demo portrait image is shown.
+          */}
+          <img
+            src="/profile.jpg"
+            alt={contactInfo.name}
+            onError={(e) => {
+              const target = e.currentTarget;
+              if (target.src.includes('/profile.jpg')) {
+                target.src = '/profile pic.jpg';
+              } else if (target.src.includes('/profile') && !target.src.includes('unsplash')) {
+                target.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80';
+              }
+            }}
+            className="w-full h-full object-cover object-top transition-transform duration-700 group-hover/img:scale-105"
+          />
+          {/* Subtle gradient overlay at bottom of image for seamless integration */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-80" />
           
-          <h2 className="font-display text-2xl font-bold text-neutral-900 dark:text-white leading-tight mb-1">
-            {contactInfo.name}
-          </h2>
-          <p className="font-mono text-xs text-orange-500 dark:text-orange-400 font-semibold mb-6">
-            {contactInfo.title}
-          </p>
-          
-          <div className="space-y-3.5 mb-6">
-            <div className="flex items-center gap-2.5">
-              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-              <span className="text-xs font-mono text-neutral-600 dark:text-neutral-300">
-                IIIT Bhubaneswar CSE Student
-              </span>
-            </div>
-            <div className="flex items-center gap-2.5">
-              <div className="w-2 h-2 rounded-full bg-orange-500"></div>
-              <span className="text-xs font-mono text-neutral-600 dark:text-neutral-300">
-                Full-Stack Architecture Focus
-              </span>
-            </div>
-            <div className="flex items-center gap-2.5">
-              <div className="w-2 h-2 rounded-full bg-indigo-500"></div>
-              <span className="text-xs font-mono text-neutral-600 dark:text-neutral-300">
-                Competitive C++ & TypeScript
-              </span>
-            </div>
+          {/* Floating Status Badge inside the image */}
+          <div className="absolute bottom-3 left-4 flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white font-mono text-[10px] font-bold shadow-sm">
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>Open to Work</span>
           </div>
         </div>
 
-        {/* Socials buttons */}
-        <div className="grid grid-cols-2 gap-3 z-10">
-          <a
-            href={contactInfo.github}
-            target="_blank"
-            referrerPolicy="no-referrer"
-            className="flex items-center justify-center gap-2 p-3 rounded-xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/40 dark:border-neutral-800/40 hover:bg-neutral-200 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300 text-xs font-mono font-semibold transition-all group"
-          >
-            <Github className="w-4 h-4" />
-            GitHub
-            <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-          </a>
+        {/* Content Area (Moved slightly lower to accommodate full-width image) */}
+        <div className="p-6 md:p-7 flex flex-col justify-between flex-1 z-10">
+          <div>
+            <h2 className="font-display text-2xl font-bold text-neutral-900 dark:text-white leading-tight mb-1">
+              {contactInfo.name}
+            </h2>
+            <p className="font-mono text-xs text-orange-500 dark:text-orange-400 font-semibold mb-5">
+              {contactInfo.title}
+            </p>
+            
+            <div className="space-y-3 mb-6">
+              <div className="flex items-center gap-2.5">
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-xs font-mono text-neutral-600 dark:text-neutral-300">
+                  IIIT Bhubaneswar CSE Student
+                </span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <div className="w-2 h-2 rounded-full bg-orange-500" />
+                <span className="text-xs font-mono text-neutral-600 dark:text-neutral-300">
+                  Full-Stack Architecture Focus
+                </span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <div className="w-2 h-2 rounded-full bg-indigo-500" />
+                <span className="text-xs font-mono text-neutral-600 dark:text-neutral-300">
+                  Competitive C++ & TypeScript
+                </span>
+              </div>
+            </div>
+          </div>
 
-          <a
-            href={contactInfo.linkedin}
-            target="_blank"
-            referrerPolicy="no-referrer"
-            className="flex items-center justify-center gap-2 p-3 rounded-xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/40 dark:border-neutral-800/40 hover:bg-neutral-200 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300 text-xs font-mono font-semibold transition-all group"
-          >
-            <Linkedin className="w-4 h-4" />
-            LinkedIn
-            <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-          </a>
+          {/* Socials buttons */}
+          <div className="grid grid-cols-2 gap-3 pt-1 z-10">
+            <a
+              href={contactInfo.github}
+              target="_blank"
+              referrerPolicy="no-referrer"
+              className="flex items-center justify-center gap-2 p-3 rounded-xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/40 dark:border-neutral-800/40 hover:bg-neutral-200 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300 text-xs font-mono font-semibold transition-all group"
+            >
+              <Github className="w-4 h-4" />
+              GitHub
+              <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+            </a>
+
+            <a
+              href={contactInfo.linkedin}
+              target="_blank"
+              referrerPolicy="no-referrer"
+              className="flex items-center justify-center gap-2 p-3 rounded-xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/40 dark:border-neutral-800/40 hover:bg-neutral-200 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300 text-xs font-mono font-semibold transition-all group"
+            >
+              <Linkedin className="w-4 h-4" />
+              LinkedIn
+              <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+            </a>
+          </div>
         </div>
       </motion.div>
 
@@ -159,6 +204,7 @@ export default function BentoProfile() {
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.2 }}
         onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
         className="bento-card bento-card-interactive hover-glow md:col-span-6 p-8 flex flex-col justify-between"
       >
         <div className="z-10">
@@ -206,7 +252,7 @@ export default function BentoProfile() {
         </div>
 
         <div className="mt-6 p-4 rounded-xl bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-100/30 dark:border-indigo-900/30 text-[11px] font-mono text-indigo-600 dark:text-indigo-400 leading-relaxed z-10">
-          ⚡ Solved 700+ combined problems focusing on Data Structures (trees, graphs, heap, trie) & Algorithms (DP, sliding window, backtracking, binary search).
+          ⚡ Solved 800+ combined problems focusing on Data Structures (trees, graphs, heap, trie) & Algorithms (DP, sliding window, backtracking, binary search).
         </div>
       </motion.div>
 
@@ -217,6 +263,7 @@ export default function BentoProfile() {
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.3 }}
         onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
         className="bento-card bento-card-interactive hover-glow md:col-span-6 p-8 flex flex-col justify-between"
       >
         <div className="z-10">

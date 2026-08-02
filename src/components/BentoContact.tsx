@@ -1,7 +1,12 @@
+'use client';
+
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { contactInfo } from '../data';
 import { Mail, Phone, MapPin, Send, Loader2, CheckCircle2, AlertCircle, Sparkles, ArrowRight } from 'lucide-react';
+
+// Import the Server Action we created in the previous step
+// import { sendContactForm } from '../actions/sendEmail'; 
 
 export default function BentoContact() {
   const [name, setName] = useState('');
@@ -17,11 +22,25 @@ export default function BentoContact() {
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const card = e.currentTarget;
+    card.style.transition = 'none';
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     card.style.setProperty('--mouse-x', `${x}px`);
     card.style.setProperty('--mouse-y', `${y}px`);
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * -1.8;
+    const rotateY = ((x - centerX) / centerX) * 1.8;
+
+    card.style.transform = `perspective(1400px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-2px) scale(1.003)`;
+  };
+
+  const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget;
+    card.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease';
+    card.style.transform = 'perspective(1400px) rotateX(0deg) rotateY(0deg) translateY(0px) scale(1)';
   };
 
   const validateEmail = (emailVal: string) => {
@@ -39,7 +58,7 @@ export default function BentoContact() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!name.trim()) {
@@ -59,7 +78,6 @@ export default function BentoContact() {
     setStatus('loading');
     setLoadingStep(0);
 
-    // Dynamic processing terminal messages
     const steps = [
       'Validating form inputs...',
       'Encrypting messaging payload...',
@@ -68,21 +86,53 @@ export default function BentoContact() {
       'Finalizing transaction...'
     ];
 
+    // Start visual loading animation
     const interval = setInterval(() => {
       setLoadingStep((prev) => {
-        if (prev >= steps.length - 1) {
-          clearInterval(interval);
-          setTimeout(() => {
-            setStatus('success');
-            setName('');
-            setEmail('');
-            setMessage('');
-          }, 600);
-          return prev;
-        }
-        return prev + 1;
+        if (prev < steps.length - 2) return prev + 1;
+        return prev;
       });
     }, 800);
+
+    try {
+      const web3FormsAccessKey = (import.meta as ImportMeta & { env: Record<string, string | undefined> }).env.VITE_WEB3FORMS_ACCESS_KEY;
+
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: web3FormsAccessKey,
+          name: name,
+          email: email,
+          message: message,
+        }),
+      });
+
+      const result = await response.json();
+
+      clearInterval(interval);
+
+      if (result.success) {
+        setLoadingStep(steps.length - 1); 
+        
+        setTimeout(() => {
+          setStatus('success');
+          setName('');
+          setEmail('');
+          setMessage('');
+        }, 800);
+      } else {
+        console.error("Transmission Error:", result.message);
+        setStatus('error');
+      }
+    } catch (error) {
+      clearInterval(interval);
+      console.error("Submission failed:", error);
+      setStatus('error');
+    }
   };
 
   return (
@@ -93,6 +143,7 @@ export default function BentoContact() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
         className="bento-card hover-glow md:col-span-8 p-8 md:p-10 flex flex-col justify-between"
       >
         <div className="z-10 w-full">
@@ -159,6 +210,35 @@ export default function BentoContact() {
                   className="mt-4 px-5 py-2 rounded-xl border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-900 font-mono text-xs font-bold text-neutral-700 dark:text-neutral-300 transition-all active:scale-95"
                 >
                   Broadcast Another Message
+                </button>
+              </motion.div>
+            )}
+
+            {/* NEW: Error State UI */}
+            {status === 'error' && (
+              <motion.div
+                key="error"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="py-10 flex flex-col items-center justify-center text-center space-y-4"
+              >
+                <div className="w-14 h-14 rounded-full bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/30 flex items-center justify-center text-rose-500">
+                  <AlertCircle className="w-8 h-8" />
+                </div>
+                <div className="space-y-1.5">
+                  <p className="font-display text-lg font-bold text-neutral-900 dark:text-white">
+                    Transmission Failed
+                  </p>
+                  <p className="text-xs font-mono text-neutral-500 dark:text-neutral-400 max-w-sm">
+                    There was an issue broadcasting your message. Please check your connection and try again.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setStatus('idle')}
+                  className="mt-4 px-5 py-2 rounded-xl border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-900 font-mono text-xs font-bold text-neutral-700 dark:text-neutral-300 transition-all active:scale-95"
+                >
+                  Retry Broadcast
                 </button>
               </motion.div>
             )}
@@ -250,6 +330,7 @@ export default function BentoContact() {
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
           onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
           className="bento-card hover-glow p-6 flex flex-col gap-3"
         >
           <div className="flex items-center gap-2.5">
@@ -270,6 +351,7 @@ export default function BentoContact() {
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
           onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
           className="bento-card hover-glow p-6 flex-1 flex flex-col justify-between"
         >
           <div className="z-10">

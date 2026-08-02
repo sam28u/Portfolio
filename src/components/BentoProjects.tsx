@@ -19,11 +19,25 @@ export default function BentoProjects() {
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const card = e.currentTarget;
+    card.style.transition = 'none';
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     card.style.setProperty('--mouse-x', `${x}px`);
     card.style.setProperty('--mouse-y', `${y}px`);
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * -1.8;
+    const rotateY = ((x - centerX) / centerX) * 1.8;
+
+    card.style.transform = `perspective(1400px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-2px) scale(1.003)`;
+  };
+
+  const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget;
+    card.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease';
+    card.style.transform = 'perspective(1400px) rotateX(0deg) rotateY(0deg) translateY(0px) scale(1)';
   };
 
   const filteredProjects = projectsData.filter((project) => {
@@ -90,6 +104,7 @@ export default function BentoProjects() {
               <div
                 key={project.id}
                 onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
                 className="bento-card bento-card-interactive hover-glow p-8 flex flex-col justify-between transition-colors duration-200"
               >
                 <div className="z-10">
@@ -149,9 +164,9 @@ export default function BentoProjects() {
                     ))}
                   </div>
                   
-                  {project.githubUrl && (
+                  {project.demoUrl && (
                     <a
-                      href={project.githubUrl}
+                      href={project.demoUrl}
                       target="_blank"
                       referrerPolicy="no-referrer"
                       className="w-8 h-8 rounded-full bg-orange-50 dark:bg-orange-500/10 text-orange-500 dark:text-orange-400 flex items-center justify-center hover:bg-orange-500 hover:text-white dark:hover:bg-orange-500 transition-all"

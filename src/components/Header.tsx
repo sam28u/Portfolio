@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sun, Moon, Menu, X, Code, Terminal, FileText, Send, User } from 'lucide-react';
+import { Sun, Moon, Menu, X, Code, Terminal, FileText, Send, User, Briefcase, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { contactInfo } from '../data';
 
@@ -26,6 +26,7 @@ export default function Header({ darkMode, setDarkMode, activeSection, setActive
   const navItems = [
     { id: 'about', label: 'About', icon: User },
     { id: 'skills', label: 'Skills', icon: Code },
+    { id: 'experience', label: 'Experience', icon: Briefcase },
     { id: 'projects', label: 'Projects', icon: Terminal },
     { id: 'resume', label: 'Resume', icon: FileText },
     { id: 'contact', label: 'Contact', icon: Send },
@@ -54,12 +55,12 @@ export default function Header({ darkMode, setDarkMode, activeSection, setActive
   };
 
   return (
-    <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 no-print ${
+    <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 no-print ${
       scrolled 
-        ? 'bg-white/80 dark:bg-[#121212]/80 backdrop-blur-md border-b border-neutral-200/50 dark:border-neutral-800/50 py-4 shadow-sm' 
+        ? 'bg-white/70 dark:bg-[#0c0c0c]/75 backdrop-blur-2xl border-b border-neutral-200/60 dark:border-neutral-800/60 py-3.5 shadow-[0_10px_30px_rgba(0,0,0,0.05)] dark:shadow-[0_10px_30px_rgba(0,0,0,0.5)]' 
         : 'bg-transparent py-6'
     }`}>
-      <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         {/* Logo / Name */}
         <a 
           href="#about" 
@@ -67,105 +68,137 @@ export default function Header({ darkMode, setDarkMode, activeSection, setActive
             e.preventDefault();
             handleNavClick('about');
           }}
-          className="flex items-center gap-2 group"
+          className="flex items-center gap-2.5 group relative"
         >
-          <div className="w-9 h-9 rounded-xl bg-orange-500/10 dark:bg-orange-500/20 border border-orange-500/30 flex items-center justify-center text-orange-500 font-mono font-bold text-lg group-hover:bg-orange-500 group-hover:text-white transition-all">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-orange-500/15 via-orange-500/10 to-amber-500/15 dark:from-orange-500/25 dark:via-orange-500/15 dark:to-amber-500/25 border border-orange-500/40 dark:border-orange-500/50 flex items-center justify-center text-orange-600 dark:text-orange-400 font-mono font-black text-lg group-hover:scale-105 group-hover:border-orange-500 group-hover:bg-orange-500 group-hover:text-white transition-all duration-300 shadow-sm">
             {contactInfo.name.charAt(0)}
           </div>
-          <span className="font-display font-bold text-lg tracking-tight">
-            {contactInfo.name.split(' ')[0]}
-            <span className="text-orange-500">.</span>
-          </span>
+          <div className="flex flex-col">
+            <span className="font-display font-black text-lg sm:text-xl tracking-tight text-neutral-900 dark:text-white group-hover:text-orange-500 transition-colors">
+              {contactInfo.name.split(' ')[0]}
+              <span className="text-orange-500 animate-pulse">.</span>
+            </span>
+            <span className="font-mono text-[9px] font-bold uppercase tracking-widest text-neutral-400 dark:text-neutral-500 -mt-1 hidden sm:block">
+              Portfolio
+            </span>
+          </div>
         </a>
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-1 bg-neutral-100 dark:bg-neutral-900 p-1 rounded-2xl border border-neutral-200/40 dark:border-neutral-800/40">
+        {/* Premium Glassmorphism Horizontal Navigation Bar */}
+        <nav className="hidden lg:flex items-center gap-1.5 bg-white/80 dark:bg-[#141414]/85 backdrop-blur-2xl px-3 py-1.5 rounded-full border border-neutral-200/80 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] relative">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeSection === item.id;
             return (
-              <button
+              <motion.button
                 key={item.id}
                 onClick={() => handleNavClick(item.id)}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-mono font-semibold transition-colors duration-200 border ${
+                whileHover={{ scale: 1.04, y: -1.5 }}
+                whileTap={{ scale: 0.96 }}
+                className={`relative px-4 py-2 rounded-full font-mono text-xs font-bold transition-colors flex items-center gap-2 z-10 ${
                   isActive
-                    ? 'bg-white dark:bg-[#1a1a1a] text-orange-500 dark:text-orange-400 shadow-sm border-neutral-200/40 dark:border-neutral-800/40'
-                    : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white border-transparent'
+                    ? 'text-orange-600 dark:text-orange-400'
+                    : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white'
                 }`}
               >
-                <Icon className="w-3.5 h-3.5" />
-                {item.label}
-              </button>
+                {/* Smooth Sliding Active Background Indicator */}
+                {isActive && (
+                  <motion.div
+                    layoutId="activeNavTab"
+                    transition={{ type: 'spring', stiffness: 420, damping: 32 }}
+                    className="absolute inset-0 bg-gradient-to-r from-orange-500/15 via-orange-500/10 to-amber-500/15 dark:from-orange-500/25 dark:via-orange-500/15 dark:to-amber-500/25 border border-orange-500/40 dark:border-orange-500/50 rounded-full shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] -z-10"
+                  />
+                )}
+
+                <Icon className={`w-3.5 h-3.5 transition-transform duration-300 ${isActive ? 'scale-110 text-orange-500 dark:text-orange-400' : 'text-neutral-400 group-hover:text-neutral-600'}`} />
+                <span>{item.label}</span>
+
+              </motion.button>
             );
           })}
         </nav>
 
-        {/* Actions & Mobile Menu Toggle */}
+        {/* Right Side Dock: Theme Toggle & Let's Talk CTA */}
         <div className="flex items-center gap-3">
           {/* Theme Toggle Button */}
-          <button
+          <motion.button
+            whileHover={{ scale: 1.08, rotate: 12 }}
+            whileTap={{ scale: 0.92 }}
             onClick={() => setDarkMode(!darkMode)}
-            className="w-10 h-10 rounded-xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/50 dark:border-neutral-800/50 flex items-center justify-center text-neutral-600 dark:text-neutral-400 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
+            className="w-10 h-10 rounded-2xl bg-white dark:bg-[#161616] border border-neutral-200/80 dark:border-neutral-800 flex items-center justify-center text-neutral-600 dark:text-neutral-300 hover:text-orange-500 dark:hover:text-orange-400 hover:border-orange-500/40 transition-colors shadow-sm"
             aria-label="Toggle theme"
           >
-            {darkMode ? <Sun className="w-4.5 h-4.5" /> : <Moon className="w-4.5 h-4.5" />}
-          </button>
+            {darkMode ? <Sun className="w-4.5 h-4.5 text-amber-400" /> : <Moon className="w-4.5 h-4.5 text-orange-500" />}
+          </motion.button>
 
-          {/* Hire Me / Contact Shortcut */}
-          <button
+          {/* Let's Talk / Contact CTA */}
+          <motion.button
+            whileHover={{ scale: 1.04, y: -1 }}
+            whileTap={{ scale: 0.96 }}
             onClick={() => handleNavClick('contact')}
-            className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-mono font-bold text-xs shadow-sm shadow-orange-500/20 transition-all active:scale-95"
+            className="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 text-white font-mono font-black text-xs shadow-md shadow-orange-500/25 border border-orange-400/30 hover:shadow-orange-500/40 transition-all relative overflow-hidden group"
           >
-            Let's Talk
-            <Send className="w-3 h-3" />
-          </button>
+            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+            <span className="relative z-10 flex items-center gap-1.5">
+              Let's Talk <Sparkles className="w-3.5 h-3.5" />
+            </span>
+          </motion.button>
 
-          {/* Mobile Hamburger */}
-          <button
+          {/* Mobile Menu Hamburger */}
+          <motion.button
+            whileTap={{ scale: 0.9 }}
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden w-10 h-10 rounded-xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/50 dark:border-neutral-800/50 flex items-center justify-center text-neutral-600 dark:text-neutral-400"
+            className="lg:hidden w-10 h-10 rounded-2xl bg-white dark:bg-[#161616] border border-neutral-200/80 dark:border-neutral-800 flex items-center justify-center text-neutral-600 dark:text-neutral-400 shadow-sm"
             aria-label="Toggle menu"
           >
-            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+            {isOpen ? <X className="w-5 h-5 text-orange-500" /> : <Menu className="w-5 h-5" />}
+          </motion.button>
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown */}
+      {/* Mobile Menu Dropdown with Glassmorphism */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className="md:hidden absolute top-full left-0 w-full bg-white dark:bg-[#121212] border-b border-neutral-200/50 dark:border-neutral-800/50 shadow-xl"
+            initial={{ opacity: 0, y: -15, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -15, scale: 0.98 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+            className="lg:hidden absolute top-full left-4 right-4 mt-2 bg-white/95 dark:bg-[#141414]/95 backdrop-blur-2xl border border-neutral-200/80 dark:border-neutral-800/80 rounded-3xl shadow-2xl overflow-hidden"
           >
-            <div className="px-6 py-4 flex flex-col gap-2">
-              {navItems.map((item) => {
+            <div className="p-4 flex flex-col gap-1.5">
+              {navItems.map((item, idx) => {
                 const Icon = item.icon;
                 const isActive = activeSection === item.id;
                 return (
-                  <button
+                  <motion.button
                     key={item.id}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: idx * 0.04 }}
                     onClick={() => handleNavClick(item.id)}
-                    className={`flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-mono font-semibold transition-colors duration-200 ${
+                    className={`flex items-center gap-3.5 w-full px-4 py-3.5 rounded-2xl text-xs font-mono font-bold transition-all ${
                       isActive
-                        ? 'bg-orange-50 dark:bg-orange-500/10 text-orange-500 dark:text-orange-400'
-                        : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-900'
+                        ? 'bg-gradient-to-r from-orange-500/15 to-amber-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/30'
+                        : 'text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-900/80'
                     }`}
                   >
-                    <Icon className="w-4.5 h-4.5" />
-                    {item.label}
-                  </button>
+                    <div className={`p-2 rounded-xl ${isActive ? 'bg-orange-500 text-white' : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400'}`}>
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    <span>{item.label}</span>
+                  </motion.button>
                 );
               })}
-              <button
+              <motion.button
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
                 onClick={() => handleNavClick('contact')}
-                className="flex items-center justify-center gap-2 w-full mt-2 py-3 rounded-xl bg-orange-500 text-white font-mono font-bold text-sm"
+                className="flex items-center justify-center gap-2 w-full mt-3 py-3.5 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 text-white font-mono font-black text-xs shadow-lg shadow-orange-500/25"
               >
-                Let's Talk
-              </button>
+                Let's Talk <Sparkles className="w-4 h-4" />
+              </motion.button>
             </div>
           </motion.div>
         )}

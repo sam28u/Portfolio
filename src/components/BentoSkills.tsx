@@ -35,13 +35,13 @@ export default function BentoSkills() {
     card.style.setProperty('--mouse-x', `${x}px`);
     card.style.setProperty('--mouse-y', `${y}px`);
 
-    // Calculate prominent 3D tilt
+    // Calculate refined, subtle 3D tilt (lowered sensitivity per user request)
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
-    const rotateX = ((y - centerY) / centerY) * -14;
-    const rotateY = ((x - centerX) / centerX) * 14;
+    const rotateX = ((y - centerY) / centerY) * -6;
+    const rotateY = ((x - centerX) / centerX) * 6;
 
-    card.style.transform = `perspective(800px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-6px) scale(1.02)`;
+    card.style.transform = `perspective(800px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-4px) scale(1.015)`;
   };
 
   const handleCardMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -54,6 +54,54 @@ export default function BentoSkills() {
     if (activeTab === 'all') return true;
     return skill.category === activeTab;
   });
+
+  const getSkillMeaningfulDetails = (skillName: string) => {
+    const nameLower = skillName.toLowerCase();
+    if (nameLower.includes('javascript')) return { role: 'Event Loop & DOM', metric: 'ES6+ • Async/Await' };
+    if (nameLower.includes('typescript react')) return { role: 'Type-Safe UI', metric: 'Custom Hooks • Redux' };
+    if (nameLower.includes('typescript')) return { role: 'Strict Static Typing', metric: 'Type Safety • 100%' };
+    if (nameLower.includes('java') && !nameLower.includes('script')) return { role: 'Backend & OOP', metric: 'Multithreading • Core' };
+    if (nameLower.includes('c++')) return { role: 'CP & Algorithms', metric: '500+ CP Solved' };
+    if (nameLower.includes('python')) return { role: 'AI & Automation', metric: 'LangChain • Scripts' };
+    if (nameLower.includes('node')) return { role: 'Async Event Runtime', metric: 'REST • Non-Blocking' };
+    if (nameLower.includes('bun')) return { role: 'Fast JS/TS Runtime', metric: '4x Faster • Built-in' };
+    
+    if (nameLower.includes('next.js')) return { role: 'Full-Stack App Router', metric: 'SSR • Server Actions' };
+    if (nameLower.includes('react')) return { role: 'Declarative UI', metric: 'Virtual DOM • SPA' };
+    if (nameLower.includes('express')) return { role: 'REST API Middleware', metric: 'Custom Routes • Fast' };
+    if (nameLower.includes('fastify')) return { role: 'High-Speed HTTP', metric: '30k+ Req/Sec Speed' };
+    if (nameLower.includes('tanstack query')) return { role: 'Async Data & Cache', metric: 'SWR Data Syncing' };
+    if (nameLower.includes('tanstack table')) return { role: 'Headless Data Grid', metric: 'Sorting & Pagination' };
+    if (nameLower.includes('langchain') || nameLower.includes('langgraph')) return { role: 'LLM & Agent Workflows', metric: 'RAG • Multi-Agent' };
+    
+    if (nameLower.includes('postgres')) return { role: 'Relational SQL DB', metric: 'ACID • Joins & Index' };
+    if (nameLower.includes('mysql')) return { role: 'Structured Data Store', metric: 'Optimized Queries' };
+    if (nameLower.includes('mongodb')) return { role: 'NoSQL Document Store', metric: 'Flexible JSON Schema' };
+    if (nameLower.includes('drizzle') || nameLower.includes('orm')) return { role: 'Type-Safe SQL ORM', metric: 'Zero-Overhead SQL' };
+    if (nameLower.includes('system design') || nameLower.includes('api')) return { role: 'Distributed Systems', metric: 'Microservices & Cache' };
+    
+    if (nameLower.includes('jwt')) return { role: 'Stateless Auth', metric: 'Signed Tokens • Guard' };
+    if (nameLower.includes('oauth')) return { role: 'Social Auth Grant', metric: 'GitHub / Google SSO' };
+    if (nameLower.includes('nextauth')) return { role: 'Full-Stack Auth Suite', metric: 'Session Guards & JWT' };
+    if (nameLower.includes('clerk')) return { role: 'Drop-in User Suite', metric: 'MFA & Webhooks Guard' };
+    if (nameLower.includes('cors') || nameLower.includes('security headers')) return { role: 'API Origin Hardening', metric: 'CSP & Rate Limiting' };
+    if (nameLower.includes('rbac')) return { role: 'Granular Permissions', metric: 'Admin / User Tiers' };
+    
+    if (nameLower.includes('vite')) return { role: 'Modern UI Tooling', metric: 'Instant HMR • ES Build' };
+    if (nameLower.includes('tailwind')) return { role: 'Utility-First Styling', metric: 'Tokens & Dark Mode' };
+    if (nameLower.includes('shadcn')) return { role: 'Radix-Based UI', metric: 'Accessible Components' };
+    if (nameLower.includes('gsap')) return { role: 'Motion Engine', metric: 'ScrollTrigger Timelines' };
+    if (nameLower.includes('chakra')) return { role: 'Modular UI Library', metric: 'Rapid Prototype Speed' };
+    if (nameLower.includes('html')) return { role: 'Web Foundations', metric: 'Semantic UI • a11y' };
+    if (nameLower.includes('npm') || nameLower.includes('pnpm')) return { role: 'Package Management', metric: 'Monorepo Workspaces' };
+    
+    if (nameLower.includes('git')) return { role: 'Version Control & CI', metric: 'Branching & PR Review' };
+    if (nameLower.includes('linux')) return { role: 'Server OS & Shell', metric: 'Bash CLI & Processes' };
+    if (nameLower.includes('ci/cd') || nameLower.includes('pipeline')) return { role: 'Automated Pipelines', metric: 'GitHub Actions • CI/CD' };
+    if (nameLower.includes('test') || nameLower.includes('debug')) return { role: 'Code Reliability', metric: 'Vitest / Jest Testing' };
+    
+    return { role: 'Core Tech Module', metric: 'Production Verified' };
+  };
 
   const getSkillIcon = (skillName: string, category: string) => {
     const nameLower = skillName.toLowerCase();
@@ -197,6 +245,7 @@ export default function BentoSkills() {
             {filteredSkills.map((skill) => {
               const styles = getCategoryStyles(skill.category);
               const SkillIcon = getSkillIcon(skill.name, skill.category);
+              const details = getSkillMeaningfulDetails(skill.name);
 
               return (
                 <div
@@ -230,19 +279,19 @@ export default function BentoSkills() {
                       <h4 className="font-display text-sm font-extrabold text-neutral-800 dark:text-neutral-100 tracking-tight leading-snug group-hover:text-orange-500 dark:group-hover:text-orange-400 transition-colors">
                         {skill.name}
                       </h4>
-                      <span className="font-mono text-[10px] text-neutral-400 dark:text-neutral-500 font-medium mt-0.5">
-                        Production Verified
+                      <span className="font-mono text-[10px] text-neutral-500 dark:text-neutral-400 font-semibold mt-0.5 leading-tight">
+                        {details.role}
                       </span>
                     </div>
                   </div>
 
-                  {/* Bottom interactive hint */}
+                  {/* Bottom value metric / architecture context */}
                   <div className="mt-3 pt-3 border-t border-neutral-100 dark:border-neutral-800/40 flex items-center justify-between text-[10px] font-mono text-neutral-400 dark:text-neutral-500 z-10">
-                    <span className="group-hover:text-neutral-700 dark:group-hover:text-neutral-300 transition-colors">
-                      3D Perspective Tilt
+                    <span className="group-hover:text-neutral-700 dark:group-hover:text-neutral-300 transition-colors font-medium">
+                      {details.metric}
                     </span>
-                    <span className="opacity-0 group-hover:opacity-100 text-orange-500 font-bold transition-opacity">
-                      Tech Stack
+                    <span className="opacity-0 group-hover:opacity-100 text-orange-500 font-bold transition-opacity flex-shrink-0 ml-1">
+                      Verified
                     </span>
                   </div>
                 </div>
