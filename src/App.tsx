@@ -5,7 +5,6 @@ import BentoProfile from './components/BentoProfile';
 import BentoSkills from './components/BentoSkills';
 import BentoExperience from './components/BentoExperience';
 import BentoProjects from './components/BentoProjects';
-import BentoResume from './components/BentoResume';
 import BentoContact from './components/BentoContact';
 import Footer from './components/Footer';
 
@@ -52,7 +51,7 @@ export default function App() {
 
   // Track active section via Intersection Observer
   useEffect(() => {
-    const sections = ['about', 'skills', 'projects', 'resume', 'contact'];
+    const sections = ['about', 'skills', 'experience', 'projects', 'contact'];
     
     const observerOptions = {
       root: null,
@@ -165,19 +164,6 @@ export default function App() {
           transition={{ duration: 0.6 }}
         >
           <BentoProjects />
-        </motion.section>
-
-        {/* Divider */}
-        <div className="h-[1px] bg-gradient-to-r from-transparent via-neutral-200 dark:via-neutral-800 to-transparent no-print" />
-
-        {/* Interactive Resume Section */}
-        <motion.section
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.6 }}
-        >
-          <BentoResume />
         </motion.section>
 
         {/* Divider */}

@@ -28,7 +28,6 @@ export default function Header({ darkMode, setDarkMode, activeSection, setActive
     { id: 'skills', label: 'Skills', icon: Code },
     { id: 'experience', label: 'Experience', icon: Briefcase },
     { id: 'projects', label: 'Projects', icon: Terminal },
-    { id: 'resume', label: 'Resume', icon: FileText },
     { id: 'contact', label: 'Contact', icon: Send },
   ];
 

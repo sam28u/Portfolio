@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { motion } from 'motion/react';
 import { contactInfo, profileSummary, valueProps, cpData } from '../data';
-import { Trophy, Code, Award, MapPin, Mail, Phone, ArrowUpRight, Github, Linkedin, Terminal, Sparkles } from 'lucide-react';
+import { Trophy, Code, Award, MapPin, Mail, Phone, ArrowUpRight, Github, Linkedin, Terminal, Sparkles, FileText } from 'lucide-react';
 
 export default function BentoProfile() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -141,12 +141,27 @@ export default function BentoProfile() {
         {/* Content Area (Moved slightly lower to accommodate full-width image) */}
         <div className="p-6 md:p-7 flex flex-col justify-between flex-1 z-10">
           <div>
-            <h2 className="font-display text-2xl font-bold text-neutral-900 dark:text-white leading-tight mb-1">
-              {contactInfo.name}
-            </h2>
-            <p className="font-mono text-xs text-orange-500 dark:text-orange-400 font-semibold mb-5">
-              {contactInfo.title}
-            </p>
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h2 className="font-display text-2xl font-bold text-neutral-900 dark:text-white leading-tight mb-1">
+                  {contactInfo.name}
+                </h2>
+                <p className="font-mono text-xs text-orange-500 dark:text-orange-400 font-semibold mb-5">
+                  {contactInfo.title}
+                </p>
+              </div>
+              
+              {/* Minimal Resume Viewing Button */}
+              <a 
+                href="/Resume.pdf?v=2"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="View Resume"
+                className="w-8 h-8 flex flex-shrink-0 items-center justify-center rounded-lg bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-200/50 dark:border-orange-500/20 hover:scale-105 hover:bg-orange-100 dark:hover:bg-orange-500/20 transition-all cursor-pointer z-20 shadow-sm"
+              >
+                <FileText className="w-4 h-4" />
+              </a>
+            </div>
             
             <div className="space-y-3 mb-6">
               <div className="flex items-center gap-2.5">
