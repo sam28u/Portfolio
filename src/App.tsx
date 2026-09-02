@@ -88,7 +88,7 @@ export default function App() {
   });
 
   return (
-    <div className="min-h-screen bg-[#f2f4f8] dark:bg-[#0c0c0c] text-neutral-900 dark:text-neutral-100 transition-colors duration-300 relative selection:bg-orange-500/20 selection:text-orange-500">
+    <div className="min-h-screen overflow-x-hidden bg-[#f2f4f8] dark:bg-[#0c0c0c] text-neutral-900 dark:text-neutral-100 transition-colors duration-300 relative selection:bg-orange-500/20 selection:text-orange-500">
       {/* Scroll Progress Line with Intense Neon Blur */}
       <motion.div 
         className="fixed top-0 left-0 right-0 h-[4.5px] bg-gradient-to-r from-orange-500 via-amber-500 to-rose-500 origin-[0%] z-[9999] shadow-[0_0_20px_rgba(249,115,22,1),0_0_40px_rgba(245,158,11,0.8),0_0_65px_rgba(244,63,94,0.6)] no-print" 

@@ -187,114 +187,105 @@ export default function BentoExperience() {
         </div>
       </div>
 
-      {/* Timeline Grid */}
-      <div className="relative">
-        {/* Central Vertical Connector Line (Desktop) */}
-        <div className="absolute left-6 md:left-1/2 top-4 bottom-4 -translate-x-1/2 w-[2px] bg-gradient-to-b from-orange-500 via-amber-500/50 to-neutral-300 dark:to-neutral-800 hidden md:block pointer-events-none" />
-
-        <div className="space-y-8">
-          <AnimatePresence mode="popLayout">
-            {filteredExperience.map((item, index) => {
-              const isEven = index % 2 === 0;
-              return (
-                <motion.div
-                  key={item.id}
-                  layout
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.4, delay: index * 0.08 }}
-                  className={`flex flex-col md:flex-row items-start ${
-                    isEven ? 'md:flex-row-reverse' : ''
-                  } gap-6 md:gap-12 relative group`}
+      {/* Compact Stacked Timeline */}
+      <div className="space-y-6">
+        <AnimatePresence mode="popLayout">
+          {filteredExperience.map((item, index) => {
+            return (
+              <motion.div
+                key={item.id}
+                layout
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.35, delay: index * 0.05 }}
+              >
+                <div
+                  onMouseMove={handleCardMouseMove}
+                  onMouseLeave={handleCardMouseLeave}
+                  className="bento-card hover-glow p-5 sm:p-6 bg-white dark:bg-[#121212] border border-neutral-200/80 dark:border-neutral-800/80 rounded-2xl shadow-lg relative overflow-hidden transition-all duration-300 group flex flex-col md:flex-row gap-5 sm:gap-8"
                 >
-                  {/* Timeline Glowing Node Dot */}
-                  <div className="hidden md:flex absolute left-1/2 top-8 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white dark:bg-[#121212] border-2 border-orange-500 items-center justify-center shadow-[0_0_15px_rgba(249,115,22,0.6)] z-20 group-hover:scale-125 transition-transform duration-300">
-                    <div className="w-3.5 h-3.5 rounded-full bg-gradient-to-tr from-orange-500 to-amber-400 animate-pulse" />
+                  {/* Subtle Ambient Gradient Corner Glow */}
+                  <div className="absolute -top-24 -left-24 w-48 h-48 rounded-full bg-orange-500/10 dark:bg-orange-500/5 blur-3xl pointer-events-none" />
+
+                  {/* Left Column: Context (Role, Org, Date, Metric) */}
+                  <div className="md:w-1/3 flex-shrink-0 space-y-4 border-b md:border-b-0 md:border-r border-neutral-100 dark:border-neutral-800/60 pb-5 md:pb-0 md:pr-6 flex flex-col relative z-10">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="flex items-center gap-1.5 font-mono text-[10px] font-extrabold text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-500/10 px-2.5 py-1 rounded-md border border-orange-200/50 dark:border-orange-500/20">
+                        <Calendar className="w-3 h-3" />
+                        {item.period}
+                      </span>
+                      <span className={`font-mono text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${item.badgeColor}`}>
+                        {item.badge}
+                      </span>
+                    </div>
+
+                    <div className="space-y-1">
+                      <h3 className="font-display text-lg sm:text-xl font-black text-neutral-900 dark:text-white tracking-tight leading-snug group-hover:text-orange-500 transition-colors">
+                        {item.role}
+                      </h3>
+                      <p className="font-sans text-xs font-bold text-neutral-600 dark:text-neutral-400 flex items-center gap-1.5">
+                        <Briefcase className="w-3.5 h-3.5 text-orange-500 flex-shrink-0" />
+                        <span>{item.organization}</span>
+                      </p>
+                    </div>
+
+                    <div className="mt-auto pt-4 hidden md:flex flex-col items-start bg-neutral-50 dark:bg-neutral-900/50 px-3 py-2 rounded-xl border border-neutral-150 dark:border-neutral-850 w-fit">
+                      <span className="font-mono text-[9px] uppercase tracking-wider text-neutral-400 font-bold">
+                        {item.metricLabel}
+                      </span>
+                      <span className="font-display text-sm font-black text-orange-500 dark:text-orange-400">
+                        {item.metricValue}
+                      </span>
+                    </div>
                   </div>
 
-                  {/* Empty Spacer for alternating layout */}
-                  <div className="hidden md:block md:w-1/2" />
+                  {/* Right Column: Details (Description, Highlights, Skills) */}
+                  <div className="md:w-2/3 flex flex-col justify-between space-y-4 relative z-10">
+                    <div className="space-y-3">
+                      <p className="font-sans text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed font-medium">
+                        {item.description}
+                      </p>
 
-                  {/* Experience Card */}
-                  <div className="w-full md:w-1/2">
-                    <div
-                      onMouseMove={handleCardMouseMove}
-                      onMouseLeave={handleCardMouseLeave}
-                      className="bento-card hover-glow p-6 sm:p-8 bg-white dark:bg-[#121212] border border-neutral-200/80 dark:border-neutral-800/80 rounded-3xl shadow-xl relative overflow-hidden transition-all duration-300"
-                    >
-                      {/* Subtle Ambient Gradient Corner Glow */}
-                      <div className="absolute -top-24 -right-24 w-48 h-48 rounded-full bg-orange-500/10 dark:bg-orange-500/5 blur-3xl pointer-events-none" />
-
-                      <div className="relative z-10 space-y-5">
-                        {/* Top Bar: Date Badge & Status Pill */}
-                        <div className="flex flex-wrap items-center justify-between gap-3">
-                          <span className="flex items-center gap-1.5 font-mono text-xs font-extrabold text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-500/10 px-3 py-1 rounded-lg border border-orange-200/50 dark:border-orange-500/20">
-                            <Calendar className="w-3.5 h-3.5" />
-                            {item.period}
-                          </span>
-                          <span className={`font-mono text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border ${item.badgeColor}`}>
-                            {item.badge}
-                          </span>
-                        </div>
-
-                        {/* Role & Organization */}
-                        <div className="space-y-1">
-                          <h3 className="font-display text-xl sm:text-2xl font-black text-neutral-900 dark:text-white tracking-tight leading-snug">
-                            {item.role}
-                          </h3>
-                          <p className="font-sans text-xs sm:text-sm font-bold text-neutral-600 dark:text-neutral-400 flex items-center gap-1.5">
-                            <Briefcase className="w-3.5 h-3.5 text-orange-500 flex-shrink-0" />
-                            <span>{item.organization}</span>
-                          </p>
-                        </div>
-
-                        {/* Description */}
-                        <p className="font-sans text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed">
-                          {item.description}
-                        </p>
-
-                        {/* Key Bullet Highlights */}
-                        <div className="space-y-2 pt-1 border-t border-neutral-100 dark:border-neutral-800/50">
-                          {item.highlights.map((highlight, idx) => (
-                            <div key={idx} className="flex items-start gap-2.5 text-xs text-neutral-600 dark:text-neutral-400">
-                              <CheckCircle2 className="w-4 h-4 text-orange-500 flex-shrink-0 mt-0.5" />
-                              <span className="leading-relaxed">{highlight}</span>
-                            </div>
-                          ))}
-                        </div>
-
-                        {/* Bottom Row: Tech Stack Pills & Impact Metric Pill */}
-                        <div className="pt-3 border-t border-neutral-100 dark:border-neutral-800/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                          <div className="flex flex-wrap gap-1.5">
-                            {item.skills.map((skill) => (
-                              <span
-                                key={skill}
-                                className="px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-900/80 border border-neutral-200/60 dark:border-neutral-800 text-[11px] font-mono font-semibold text-neutral-700 dark:text-neutral-300"
-                              >
-                                {skill}
-                              </span>
-                            ))}
+                      <div className="space-y-1.5">
+                        {item.highlights.map((highlight, idx) => (
+                          <div key={idx} className="flex items-start gap-2 text-xs text-neutral-600 dark:text-neutral-400">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-orange-500 flex-shrink-0 mt-0.5" />
+                            <span className="leading-relaxed">{highlight}</span>
                           </div>
+                        ))}
+                      </div>
+                    </div>
 
-                          {/* Impact Metric Box */}
-                          <div className="flex flex-col items-start sm:items-end flex-shrink-0 bg-neutral-50 dark:bg-neutral-900/50 px-3.5 py-1.5 rounded-xl border border-neutral-150 dark:border-neutral-850">
-                            <span className="font-mono text-[9px] uppercase tracking-wider text-neutral-400 font-bold">
-                              {item.metricLabel}
-                            </span>
-                            <span className="font-display text-sm font-black text-orange-500 dark:text-orange-400">
-                              {item.metricValue}
-                            </span>
-                          </div>
-                        </div>
+                    <div className="flex flex-wrap items-center justify-between gap-3 pt-4 mt-auto border-t border-neutral-100 dark:border-neutral-800/50">
+                      <div className="flex flex-wrap gap-1.5">
+                        {item.skills.map((skill) => (
+                          <span
+                            key={skill}
+                            className="px-2 py-0.5 rounded-md bg-neutral-100 dark:bg-neutral-900/80 border border-neutral-200/60 dark:border-neutral-800 text-[10px] font-mono font-semibold text-neutral-600 dark:text-neutral-400"
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                      
+                      {/* Mobile Impact Metric Box */}
+                      <div className="md:hidden flex flex-col items-end flex-shrink-0">
+                        <span className="font-mono text-[9px] uppercase tracking-wider text-neutral-400 font-bold">
+                          {item.metricLabel}
+                        </span>
+                        <span className="font-display text-xs font-black text-orange-500">
+                          {item.metricValue}
+                        </span>
                       </div>
                     </div>
                   </div>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
-        </div>
+
+                </div>
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
       </div>
 
       {/* Bottom Highlight Feature Banner */}
